@@ -10,13 +10,14 @@ import java.util.Map;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.staticFileLocation;
 
 /**
  * Created by Keyes on 6/18/2016.
  */
 public class Main {
     public static void main(String[] args) {
-
+        staticFileLocation("/public");
         CourseIdeaDAO dao = new SimpleCourseIdeaDAO(); /*interface and implementation*/
         //this implementation is just for prototyping and will not survive server restart, for persistence, need a db
         get("/", (req, res) -> {
