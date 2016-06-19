@@ -1,0 +1,16 @@
+{{#partial "content"}}
+    <h1>Current Ideas</h1>
+
+    <ul>
+        {{#each ideas}}
+            <li>{{title}}</li><!--handlebars understands that it can call getTitle()-->
+        {{/each}}
+    </ul>
+
+    <form action="/ideas" method="post"> <!--posting to ideas, handle in Main(1)-->
+        <input type="text" placeholder="What's your idea?" name="title">
+        <button>Suggest!</button>
+    </form>
+{{/partial}}
+
+{{> base.hbs}}
