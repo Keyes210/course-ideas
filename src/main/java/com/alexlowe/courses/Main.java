@@ -9,9 +9,7 @@ import spark.template.handlebars.HandlebarsTemplateEngine;
 import java.util.HashMap;
 import java.util.Map;
 
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.staticFileLocation;
+import static spark.Spark.*;
 
 /**
  * Created by Keyes on 6/18/2016.
@@ -22,9 +20,22 @@ public class Main {
         CourseIdeaDAO dao = new SimpleCourseIdeaDAO(); /*interface and implementation*/
         //this implementation is just for prototyping and will not survive server restart, for persistence, need a db
 
+        before((req, res) -> {
+            if(req.cookie("username") != null){
+                req.attribute("username", req.cookie("username"));
+            }
+        });
+
+        before("/ideas", (req, res) -> {
+            //TODO: send msg about redirect
+            if(req.attribute("username") == null){
+                res.redirect("/");
+                halt();
+            }
+        });
         get("/", (req, res) -> {
             Map<String,String> model = new HashMap<>();
-            model.put("username", req.cookie("username"));
+            model.put("username", req.attribute("username"));
             return new ModelAndView(model, "index.hbs");
         },  new HandlebarsTemplateEngine());
 
@@ -32,9 +43,9 @@ public class Main {
             Map<String,String> model = new HashMap<>();
             String username = req.queryParams("username");
             res.cookie("username", username);
-            model.put("username", username);
-            return new ModelAndView(model, "sign-in.hbs");
-        },  new HandlebarsTemplateEngine());
+            res.redirect("/");
+            return null;
+        });
 
         get("/ideas", (req, res) -> { /* ** */
             Map<String,Object> model = new HashMap<>();
@@ -44,11 +55,17 @@ public class Main {
 
         post("/ideas", (req, res) -> {
             String title = req.queryParams("title");
-            //TODO:username is tied to cookie implementation, want to change that;
             CourseIdea courseIdea = new CourseIdea(title, req.queryParams("username"));
             dao.add(courseIdea);
             res.redirect("ideas"); /*refresh page*/
             return null;
-        },  new HandlebarsTemplateEngine());
+        });
+
+        post("/ideas/:slug/vote", (req, res) -> {
+            CourseIdea idea = dao.findBySlug(req.params("slug")); //this pulls whats in :slug
+            idea.addVoter(req.attribute("username"));
+            res.redirect("ideas");
+            return null;
+        });
     }
 }

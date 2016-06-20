@@ -13,6 +13,7 @@
     <orderEntry type="library" name="Gradle: com.sparkjava:spark-core:2.5" level="project" />
     <orderEntry type="library" name="Gradle: com.sparkjava:spark-template-handlebars:2.3" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-simple:1.7.21" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.slugify:slugify:2.1.4" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:4.11" level="project" />
     <orderEntry type="library" name="Gradle: org.eclipse.jetty:jetty-server:9.3.6.v20151106" level="project" />
     <orderEntry type="library" name="Gradle: org.eclipse.jetty:jetty-webapp:9.3.6.v20151106" level="project" />

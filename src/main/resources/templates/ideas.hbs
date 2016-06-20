@@ -3,7 +3,11 @@
 
     <ul>
         {{#each ideas}}
-            <li>{{title}}</li><!--handlebars understands that it can call getTitle()-->
+            <li>
+                <form action="/ideas/{{slug}}/vote" method="post">
+                    {{title}} ({{voteCount}} votes) <button>Vote</button>
+                </form>
+            </li><!--handlebars understands that it can call getTitle(); also getVoteCount()-->
         {{/each}}
     </ul>
 
