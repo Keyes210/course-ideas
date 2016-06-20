@@ -57,14 +57,20 @@ public class Main {
             String title = req.queryParams("title");
             CourseIdea courseIdea = new CourseIdea(title, req.queryParams("username"));
             dao.add(courseIdea);
-            res.redirect("ideas"); /*refresh page*/
+            res.redirect("/ideas"); /*refresh page*/
             return null;
         });
+
+        get("/ideas/:slug", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            model.put("idea", dao.findBySlug(req.params("slug")));
+            return new ModelAndView(model, "idea.hbs");
+        }, new HandlebarsTemplateEngine());
 
         post("/ideas/:slug/vote", (req, res) -> {
             CourseIdea idea = dao.findBySlug(req.params("slug")); //this pulls whats in :slug
             idea.addVoter(req.attribute("username"));
-            res.redirect("ideas");
+            res.redirect("/ideas");
             return null;
         });
     }
